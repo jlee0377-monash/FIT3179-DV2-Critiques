@@ -1,0 +1,104 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": "container",
+  "height": 340,
+  "title": {
+    "text": "Where are listed farmers’ markets concentrated?",
+    "subtitle": "State-level choropleth with state names and counts.",
+    "fontSize": 14,
+    "subtitleFontSize": 11,
+    "anchor": "start"
+  },
+  "projection": {
+    "type": "mercator",
+    "center": [133, -27],
+    "scale": 650
+  },
+  "data": {
+    "url": "https://raw.githubusercontent.com/rowanhogan/australian-states/master/states.geojson",
+    "format": {
+      "type": "json",
+      "property": "features"
+    }
+  },
+  "transform": [
+    {
+      "calculate": "datum.properties.STATE_NAME == 'New South Wales' ? 15 : datum.properties.STATE_NAME == 'Victoria' ? 13 : datum.properties.STATE_NAME == 'South Australia' ? 3 : datum.properties.STATE_NAME == 'Western Australia' ? 3 : datum.properties.STATE_NAME == 'Queensland' ? 2 : datum.properties.STATE_NAME == 'Tasmania' ? 2 : datum.properties.STATE_NAME == 'Australian Capital Territory' ? 1 : 0",
+      "as": "MarketCount"
+    }
+  ],
+  "layer": [
+    {
+      "mark": {
+        "type": "geoshape",
+        "stroke": "#ffffff",
+        "strokeWidth": 1.2
+      },
+      "encoding": {
+        "color": {
+          "field": "MarketCount",
+          "type": "quantitative",
+          "title": "Listed markets",
+          "scale": {
+            "domain": [0, 15],
+            "scheme": "purples"
+          },
+          "legend": {
+            "orient": "bottom",
+            "direction": "horizontal"
+          }
+        },
+        "tooltip": [
+          {
+            "field": "properties.STATE_NAME",
+            "type": "nominal",
+            "title": "State"
+          },
+          {
+            "field": "MarketCount",
+            "type": "quantitative",
+            "title": "Listed markets"
+          }
+        ]
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {"Label": "NSW (15)", "longitude": 146.8, "latitude": -32.5},
+          {"Label": "VIC (13)", "longitude": 144.5, "latitude": -36.8},
+          {"Label": "SA (3)", "longitude": 135.2, "latitude": -30.5},
+          {"Label": "WA (3)", "longitude": 122.0, "latitude": -25.0},
+          {"Label": "QLD (2)", "longitude": 144.0, "latitude": -22.5},
+          {"Label": "TAS (2)", "longitude": 146.6, "latitude": -42.0},
+          {"Label": "ACT (1)", "longitude": 149.1, "latitude": -35.3}
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "fontSize": 11,
+        "fontWeight": "bold",
+        "color": "#1e293b"
+      },
+      "encoding": {
+        "longitude": {
+          "field": "longitude",
+          "type": "quantitative"
+        },
+        "latitude": {
+          "field": "latitude",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "Label",
+          "type": "nominal"
+        }
+      }
+    }
+  ],
+  "config": {
+    "view": {
+      "stroke": null
+    }
+  }
+}

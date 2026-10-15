@@ -1,0 +1,136 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": 360,
+  "height": 300,
+  "title": {
+    "text": "Reported market-day patterns",
+    "subtitle": "Text-based grouping: whether the schedule mentions a weekend day",
+    "fontSize": 14,
+    "subtitleFontSize": 11
+  },
+  "data": {
+    "url": "AFMA_markets.csv",
+    "format": {
+      "type": "csv"
+    }
+  },
+  "transform": [
+    {
+      "filter": "isValid(datum.Market_Days) && trim(datum.Market_Days) != ''"
+    },
+    {
+      "calculate": "indexof(lower(datum.Market_Days), 'saturday') >= 0 || indexof(lower(datum.Market_Days), 'sunday') >= 0 || indexof(lower(datum.Market_Days), 'sat') >= 0 || indexof(lower(datum.Market_Days), 'sun') >= 0 ? 'Weekend mentioned' : 'No weekend day mentioned'",
+      "as": "Market_Day_Type"
+    },
+    {
+      "aggregate": [
+        {
+          "op": "count",
+          "as": "Listings"
+        }
+      ],
+      "groupby": [
+        "Market_Day_Type"
+      ]
+    },
+    {
+      "joinaggregate": [
+        {
+          "op": "sum",
+          "field": "Listings",
+          "as": "Total"
+        }
+      ]
+    },
+    {
+      "calculate": "format(datum.Listings / datum.Total, '.0%')",
+      "as": "Percentage"
+    },
+    {
+      "calculate": "datum.Market_Day_Type + '\\n' + datum.Listings + ' (' + datum.Percentage + ')'",
+      "as": "Segment_Label"
+    }
+  ],
+  "layer": [
+    {
+      "mark": {
+        "type": "arc",
+        "innerRadius": 58,
+        "outerRadius": 108,
+        "stroke": "white",
+        "strokeWidth": 2
+      },
+      "encoding": {
+        "theta": {
+          "field": "Listings",
+          "type": "quantitative",
+          "stack": true
+        },
+        "color": {
+          "field": "Market_Day_Type",
+          "type": "nominal",
+          "title": "Schedule grouping",
+          "scale": {
+            "domain": [
+              "Weekend mentioned",
+              "No weekend day mentioned"
+            ],
+            "range": [
+              "#6FA8DC",
+              "#F2C879"
+            ]
+          },
+          "legend": {
+            "orient": "bottom"
+          }
+        },
+        "tooltip": [
+          {
+            "field": "Market_Day_Type",
+            "type": "nominal",
+            "title": "Grouping"
+          },
+          {
+            "field": "Listings",
+            "type": "quantitative",
+            "title": "Listings"
+          },
+          {
+            "field": "Percentage",
+            "type": "nominal",
+            "title": "Share"
+          }
+        ]
+      }
+    },
+    {
+      "mark": {
+        "type": "text",
+        "radius": 83,
+        "fontSize": 10,
+        "fontWeight": "bold",
+        "color": "#1e293b"
+      },
+      "encoding": {
+        "theta": {
+          "field": "Listings",
+          "type": "quantitative",
+          "stack": true
+        },
+        "text": {
+          "field": "Segment_Label",
+          "type": "nominal"
+        }
+      }
+    }
+  ],
+  "config": {
+    "title": {
+      "color": "#243B53",
+      "subtitleColor": "#526779"
+    },
+    "view": {
+      "stroke": null
+    }
+  }
+}

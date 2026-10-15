@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Australian Farmers’ Markets | A Comprehensive Data Story</title>
+    <!-- Vega & Vega-Lite Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/vega@5"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-lite@5"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-embed@6"></script>
+    <!-- Pure.css and Custom Styles -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@2.0.6/build/pure-min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <main class="page">
+        <!-- Hero Section -->
+        <header class="hero">
+            <p class="eyebrow">A COMPREHENSIVE DATA STORY · AUSTRALIA</p>
+            <h1>Farmers’ Markets: Where They Gather, When They Happen</h1>
+            <p class="dek">An in-depth visual exploration blending national AFMA directory patterns with Brisbane community event dynamics.</p>
+            <p class="note">This visualisation integrates the Australian Farmers’ Markets Association (AFMA) national directory with Brisbane City Council event listings[cite: 15]. By combining these two distinct data sources, this narrative offers complementary insights into regional agricultural distribution, consumer access, and urban event scheduling[cite: 15].</p>
+        </header>
+
+        <!-- Section 01: Maps & Geographic Distribution -->
+        <section>
+            <div class="section-heading">
+                <span>01</span>
+                <div>
+                    <h2>Geographic Concentration & Spatial Mapping</h2>
+                    <p>Evaluating spatial distribution across multiple advanced map idioms (Choropleth, Proportional Symbols, and Categorical Points)[cite: 21, 22, 24].</p>
+                </div>
+            </div>
+            <div class="grid">
+                <article class="chart wide">
+                    <div id="map_choropleth"></div>
+                    <p class="chart-caption"><strong>How to read this:</strong> Darker blue shades represent higher state-level counts in the supplied directory. Capital markers are reference points, not individual market locations.</p>
+                </article>
+                <article class="chart">
+                    <div id="map_dot"></div>
+                    <p class="chart-caption"><strong>How to read this:</strong> Proportional circles positioned at state capital reference points. Larger circle areas correspond to higher registered market volumes.</p>
+                </article>
+                <article class="chart">
+                    <div id="map_symbol"></div>
+                    <p class="chart-caption"><strong>How to read this:</strong> Square symbols identify state-capital reference points; labels show state codes and counts where space permits.</p>
+                </article>
+                <article class="chart wide">
+                    <div id="map_layered"></div>
+                    <p class="chart-caption"><strong>How to read this:</strong> Layered annotation map combining capital reference coordinates with explicit numeric text labels for immediate cross-state comparison.</p>
+                </article>
+            </div>
+        </section>
+
+        <!-- Section 02: National Directory & Operational Frequencies -->
+        <section>
+            <div class="section-heading">
+                <span>02</span>
+                <div>
+                    <h2>National Directory & Operating Schedules</h2>
+                    <p>Analyzing state-level rankings and recurring market frequencies from the AFMA dataset[cite: 19, 25].</p>
+                </div>
+            </div>
+            <div class="grid">
+                <article class="chart">
+                    <div id="operator_bar"></div>
+                    <p class="chart-caption"><strong>How to read this:</strong> Horizontal bar chart detailing state-level market totals with direct numeric value annotations.</p>
+                </article>
+                <article class="chart">
+                    <div id="market_day_bar"></div>
+                    <p class="chart-caption"><strong>How to read this:</strong> Counts of recorded schedule labels; similar-looking text labels are not automatically merged.</p>
+                </article>
+                <article class="chart">
+                    <div id="arc_chart"></div>
+                    <p class="chart-caption"><strong>How to read this:</strong> Broad text-based grouping indicating whether the recorded schedule mentions a weekend day. “No weekend day mentioned” does not prove weekday-only operation.</p>
+                </article>
+            </div>
+        </section>
+
+        <!-- Section 03: Brisbane Event Dynamics & Temporal Patterns -->
+        <section>
+            <div class="section-heading">
+                <span>03</span>
+                <div>
+                    <h2>Brisbane Event Dynamics & Temporal Analysis</h2>
+                    <p>Uncovering venue popularity, event type distribution, and scheduling rhythms from Brisbane community records[cite: 13, 14, 16, 17, 18, 20, 28].</p>
+                </div>
+            </div>
+            <div class="grid">
+                <article class="chart">
+                    <div id="bar_chart"></div>
+                    <p class="chart-caption"><strong>How to read this:</strong> Ranks Brisbane venues by total community market event listings.</p>
+                </article>
+                <article class="chart">
+                    <div id="heatmap"></div>
+                    <p class="chart-caption"><strong>How to read this:</strong> Matrix heatmap showing event record density across specific venue and event-type pairs.</p>
+                </article>
+                <article class="chart">
+                    <div id="line_chart"></div>
+                    <p class="chart-caption"><strong>How to read this:</strong> Monthly event-record totals with a direct label for each month.</p>
+                </article>
+                <article class="chart">
+                    <div id="area_chart"></div>
+                    <p class="chart-caption"><strong>How to read this:</strong> Stacked area chart illustrating how event-type composition evolves across seasons.</p>
+                </article>
+                <article class="chart">
+                    <div id="scatter_plot"></div>
+                    <p class="chart-caption"><strong>How to read this:</strong> Bubble chart mapping event categories and venues where circle scale denotes record volume.</p>
+                </article>
+                <article class="chart">
+                    <div id="calendar_heatmap"></div>
+                    <p class="chart-caption"><strong>How to read this:</strong> Calendar grid highlighting event concentration across days of the week and months.</p>
+                </article>
+                <article class="chart wide">
+                    <div id="start_time_dot"></div>
+                    <p class="chart-caption"><strong>How to read this:</strong> Comparative bar distribution of scheduled event start times (e.g., 6:00 AM vs. 8:00 AM).</p>
+                </article>
+            </div>
+        </section>
+
+        <!-- Synthesis & Key Takeaways -->
+        <section class="takeaway">
+            <h2>Synthesis & Key Takeaways</h2>
+            <p>The supplied AFMA directory contains more listings for New South Wales and Victoria than for other represented states. Brisbane event records show scheduled events across dates, venues and event categories. These datasets describe listings and schedules; they do not measure attendance, sales, stall diversity or the causes of geographic differences.</p>
+            <p class="note">Data Sources: AFMA Market Directory (AFMA_markets.csv) and Brisbane City Council Event Listings (brisbane-markets.csv)[cite: 15].</p>
+        </section>
+
+        <!-- Footer / Metadata -->
+        <footer>
+            <p>Created by Lee Jie Yi (Student ID: 34075291) · FIT3179 Data Visualisation 2 · Monash University · October 2026</p>
+            <p>Generative AI tools (Gemini) were utilized for code drafting and syntax verification; final design integration, data storytelling, and authorial review were independently completed.</p>
+        </footer>
+    </main>
+    <script src="vega_lite_visualisation.js"></script>
+</body>
+</html>

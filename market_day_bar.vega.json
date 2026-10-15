@@ -1,0 +1,148 @@
+
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": "container",
+  "height": 320,
+  "title": {
+    "text": "How often do listed markets operate?",
+    "subtitle": "Number of AFMA listings by their recorded operating schedule.",
+    "anchor": "start",
+    "fontSize": 15,
+    "subtitleFontSize": 11
+  },
+  "data": {
+    "url": "AFMA_markets.csv",
+    "format": {
+      "type": "csv"
+    }
+  },
+  "transform": [
+    {
+      "filter": "isValid(datum.Market_Days) && datum.Market_Days != ''"
+    },
+    {
+      "aggregate": [
+        {
+          "op": "count",
+          "as": "Listings"
+        }
+      ],
+      "groupby": [
+        "Market_Days"
+      ]
+    }
+  ],
+  "layer": [
+    {
+      "mark": {
+        "type": "rule",
+        "color": "#d8e1e8",
+        "strokeWidth": 2
+      },
+      "encoding": {
+        "x": {
+          "field": "Listings",
+          "type": "quantitative"
+        },
+        "x2": {
+          "datum": 0
+        },
+        "y": {
+          "field": "Market_Days",
+          "type": "nominal",
+          "sort": "-x"
+        }
+      }
+    },
+    {
+      "mark": {
+        "type": "point",
+        "filled": true,
+        "size": 150,
+        "color": "#287C74",
+        "stroke": "#ffffff",
+        "strokeWidth": 1.5
+      },
+      "encoding": {
+        "x": {
+          "field": "Listings",
+          "type": "quantitative",
+          "title": "Number of market listings",
+          "scale": {
+            "zero": true
+          },
+          "axis": {
+            "tickMinStep": 1,
+            "labelFontSize": 11,
+            "titleFontSize": 12,
+            "grid": true,
+            "gridColor": "#e8edf2"
+          }
+        },
+        "y": {
+          "field": "Market_Days",
+          "type": "nominal",
+          "sort": "-x",
+          "title": "Recorded operating schedule",
+          "axis": {
+            "labelLimit": 260,
+            "labelFontSize": 10,
+            "titleFontSize": 12,
+            "ticks": false,
+            "domain": false
+          }
+        },
+        "tooltip": [
+          {
+            "field": "Market_Days",
+            "type": "nominal",
+            "title": "Operating schedule"
+          },
+          {
+            "field": "Listings",
+            "type": "quantitative",
+            "title": "Market listings",
+            "format": ","
+          }
+        ]
+      }
+    },
+    {
+      "mark": {
+        "type": "text",
+        "align": "left",
+        "baseline": "middle",
+        "dx": 10,
+        "fontSize": 11,
+        "fontWeight": "bold",
+        "color": "#174c46"
+      },
+      "encoding": {
+        "x": {
+          "field": "Listings",
+          "type": "quantitative"
+        },
+        "y": {
+          "field": "Market_Days",
+          "type": "nominal",
+          "sort": "-x"
+        },
+        "text": {
+          "field": "Listings",
+          "type": "quantitative",
+          "format": ","
+        }
+      }
+    }
+  ],
+  "config": {
+    "view": {
+      "stroke": null
+    },
+    "font": "Arial",
+    "axis": {
+      "domainColor": "#cbd5e1",
+      "tickColor": "#cbd5e1"
+    }
+  }
+}
