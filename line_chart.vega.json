@@ -4,7 +4,7 @@
   "height": 280,
   "title": {
     "text": "How does event activity change over time?",
-    "subtitle": "Daily event-record counts."
+    "subtitle": "Monthly event-record counts."
   },
   "data": {
     "url": "brisbane-markets.csv"
@@ -51,7 +51,7 @@
     "y": {
       "field": "Events",
       "type": "quantitative",
-      "title": "Event records per date"
+      "title": "Event records per month"
     },
     "tooltip": [
       {

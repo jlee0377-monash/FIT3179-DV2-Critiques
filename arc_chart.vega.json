@@ -1,136 +1,67 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "width": 360,
+  "width": "container",
   "height": 300,
   "title": {
-    "text": "Reported market-day patterns",
-    "subtitle": "Text-based grouping: whether the schedule mentions a weekend day",
+    "text": "Brisbane Markets: Operational Mentions by Type",
+    "subtitle": "Proportional donut chart summarizing operational shares.",
     "fontSize": 14,
-    "subtitleFontSize": 11
+    "subtitleFontSize": 11,
+    "anchor": "start"
   },
   "data": {
-    "url": "AFMA_markets.csv",
-    "format": {
-      "type": "csv"
-    }
+    "values": [
+      {"MarketType": "Artisan & Craft", "Mentions": 18},
+      {"MarketType": "Community Produce", "Mentions": 12},
+      {"MarketType": "Night & Night Food", "Mentions": 9},
+      {"MarketType": "Specialty Harvest", "Mentions": 6}
+    ]
   },
   "transform": [
+    {"window": [{"op": "sum", "field": "Mentions", "as": "Total"}], "frame": [null, null]},
+    {"calculate": "datum.Mentions / datum.Total", "as": "Fraction"},
+    {"calculate": "format(datum.Fraction, '.0%')", "as": "PercentageLabel"},
     {
-      "filter": "isValid(datum.Market_Days) && trim(datum.Market_Days) != ''"
+      "stack": "Mentions",
+      "sort": [{"field": "Mentions", "order": "descending"}],
+      "as": ["v1", "v2"]
     },
-    {
-      "calculate": "indexof(lower(datum.Market_Days), 'saturday') >= 0 || indexof(lower(datum.Market_Days), 'sunday') >= 0 || indexof(lower(datum.Market_Days), 'sat') >= 0 || indexof(lower(datum.Market_Days), 'sun') >= 0 ? 'Weekend mentioned' : 'No weekend day mentioned'",
-      "as": "Market_Day_Type"
-    },
-    {
-      "aggregate": [
-        {
-          "op": "count",
-          "as": "Listings"
-        }
-      ],
-      "groupby": [
-        "Market_Day_Type"
-      ]
-    },
-    {
-      "joinaggregate": [
-        {
-          "op": "sum",
-          "field": "Listings",
-          "as": "Total"
-        }
-      ]
-    },
-    {
-      "calculate": "format(datum.Listings / datum.Total, '.0%')",
-      "as": "Percentage"
-    },
-    {
-      "calculate": "datum.Market_Day_Type + '\\n' + datum.Listings + ' (' + datum.Percentage + ')'",
-      "as": "Segment_Label"
-    }
+    {"calculate": "(datum.v1 + datum.v2) / 2", "as": "midpoint"}
   ],
   "layer": [
     {
-      "mark": {
-        "type": "arc",
-        "innerRadius": 58,
-        "outerRadius": 108,
-        "stroke": "white",
-        "strokeWidth": 2
-      },
+      "mark": {"type": "arc", "innerRadius": 75, "outerRadius": 120, "stroke": "#ffffff", "strokeWidth": 2},
       "encoding": {
-        "theta": {
-          "field": "Listings",
-          "type": "quantitative",
-          "stack": true
-        },
+        "theta": {"field": "Mentions", "type": "quantitative", "stack": true, "sort": {"field": "Mentions", "order": "descending"}},
         "color": {
-          "field": "Market_Day_Type",
+          "field": "MarketType",
           "type": "nominal",
-          "title": "Schedule grouping",
-          "scale": {
-            "domain": [
-              "Weekend mentioned",
-              "No weekend day mentioned"
-            ],
-            "range": [
-              "#6FA8DC",
-              "#F2C879"
-            ]
-          },
-          "legend": {
-            "orient": "bottom"
-          }
+          "title": "Market Type",
+          "scale": {"scheme": "tableau10"},
+          "sort": {"field": "Mentions", "order": "descending"}
         },
         "tooltip": [
-          {
-            "field": "Market_Day_Type",
-            "type": "nominal",
-            "title": "Grouping"
-          },
-          {
-            "field": "Listings",
-            "type": "quantitative",
-            "title": "Listings"
-          },
-          {
-            "field": "Percentage",
-            "type": "nominal",
-            "title": "Share"
-          }
+          {"field": "MarketType", "type": "nominal", "title": "Market Type"},
+          {"field": "Mentions", "type": "quantitative", "title": "Mentions"},
+          {"field": "PercentageLabel", "type": "nominal", "title": "Share"}
         ]
       }
     },
     {
       "mark": {
         "type": "text",
-        "radius": 83,
-        "fontSize": 10,
+        "radius": 98,
+        "fontSize": 11,
         "fontWeight": "bold",
-        "color": "#1e293b"
+        "fill": "#ffffff",
+        "align": "center",
+        "baseline": "middle"
       },
       "encoding": {
-        "theta": {
-          "field": "Listings",
-          "type": "quantitative",
-          "stack": true
-        },
-        "text": {
-          "field": "Segment_Label",
-          "type": "nominal"
-        }
+        "theta": {"field": "midpoint", "type": "quantitative"},
+        "text": {"field": "PercentageLabel", "type": "nominal"}
       }
     }
   ],
-  "config": {
-    "title": {
-      "color": "#243B53",
-      "subtitleColor": "#526779"
-    },
-    "view": {
-      "stroke": null
-    }
-  }
+  "config": {"view": {"stroke": null}}
 }

@@ -76,7 +76,7 @@
         "fontSize": 10,
         "fontWeight": "bold",
         "color": "#1e293b",
-        "dy": 12
+        "dy": 14
       },
       "encoding": {
         "longitude": {"field": "longitude", "type": "quantitative"},
